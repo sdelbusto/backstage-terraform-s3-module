@@ -8,7 +8,7 @@ Update your `app-config.yaml` and add the following to your catalog locations:
 
 ```yaml
     - type: url
-      target: https://github.com/proffalken/backstage-terraform-module/blob/main/template.yaml
+      target: https://github.com/sdelbusto/backstage-terraform-s3-module/blob/main/template.yaml
       rules:
         - allow: [Template]
 

@@ -7,7 +7,7 @@ metadata:
   title: Terraform Module
   description: Create a new module for use with Terraform.io
 spec:
-  owner: github.com/proffalken
+  owner: github.com/sdelbusto
   type: service
 
   # these are the steps which are rendered in the frontend with the form input
