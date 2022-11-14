@@ -1,0 +1,86 @@
+
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+# some metadata about the template itself
+metadata:
+  name: terraform
+  title: Terraform Module
+  description: Create a new module for use with Terraform.io
+spec:
+  owner: github.com/proffalken
+  type: service
+
+  # these are the steps which are rendered in the frontend with the form input
+  parameters:
+    - title: Create a new Terraform Module
+      required:
+        - name
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name of the terraform module
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        description:
+          title: A short description of the module - put full details in the README!
+          type: string
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        provider:
+          title: The Terraform Provider to use
+          enum:
+            - aws
+            - azure
+
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          value: terraform-${{ parameters.provider }}-${{ parameters.name }}
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  # here's the steps that are executed in series in the scaffolder backend
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: https://github.com/proffalken/backstage-terraform-module/tree/main/templates/
+        values:
+          name: ${{ parameters.name }}
+          type: ${{ parameters.type }}
+          owner: ${{ parameters.owner }}
+          description: ${{ parameters.description }}
+          repo_name: ${{ (parameters.repoUrl | parseRepoUrl)["repo"] }}
+          repo_owner: ${{ (parameters.repoUrl | parseRepoUrl)["owner"] }}
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: Terraform Module for ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        requireCodeOwnerReviews: true
+        defaultBranch: main
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
