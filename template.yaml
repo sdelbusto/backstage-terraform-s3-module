@@ -59,7 +59,7 @@ spec:
       name: Fetch Base
       action: fetch:template
       input:
-        url: https://github.com/proffalken/backstage-terraform-module/tree/main/templates/
+        url: https://github.com/sdelbusto/backstage-terraform-s3-module/blob/main/template.yaml
         values:
           name: ${{ parameters.name }}
           type: ${{ parameters.type }}
