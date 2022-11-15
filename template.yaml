@@ -40,7 +40,7 @@ spec:
             - aws
             - azure
         bucket:
-          title: Set bucket name
+          title: Set bucket name prefix
           type: string
 
     - title: Choose a repo location
