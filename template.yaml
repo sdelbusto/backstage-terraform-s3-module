@@ -73,6 +73,16 @@ spec:
           description: ${{ parameters.description }}
           repo_name: ${{ (parameters.repoUrl | parseRepoUrl)["repo"] }}
           repo_owner: ${{ (parameters.repoUrl | parseRepoUrl)["owner"] }}
+          
+    - id: convert-tfvars
+      name: Creating tfvars file
+      action: fs:rename
+      input:
+        files:
+          - from: ./prod/terraform 
+            to: ./prod/terraform.tfvars
+          - from: ./test/terraform
+            to: ./test/terraform.tfvars
 
     - id: publish
       name: Publish
@@ -90,13 +100,3 @@ spec:
       input:
         repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: '/catalog-info.yaml'
-
-    - id: convert-tfvars
-      name: Rename file to create tfvars file
-      action: fs:rename
-      input:
-        files:
-          - from: ./prod/terraform 
-            to: ./prod/terraform.tfvars
-          - from: ./test/terraform
-            to: ./test/terraform.tfvars
