@@ -61,7 +61,7 @@ spec:
       input:
         url: https://github.com/sdelbusto/backstage-terraform-s3-module/tree/main/templates/
         copyWithoutRender:
-          - .github/workflows/*
+          - templates/.github/workflows/*
         values:
           name: ${{ parameters.name }}
           type: ${{ parameters.type }}
