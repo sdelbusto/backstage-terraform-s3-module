@@ -17,7 +17,7 @@ spec:
         - name
       properties:
         name:
-          title: Name
+          title: Component Name
           type: string
           description: Unique name of the terraform module
           ui:autofocus: true
@@ -39,6 +39,9 @@ spec:
           enum:
             - aws
             - azure
+        bucket:
+          title: Set bucket name
+          type: string
 
     - title: Choose a repo location
       required:
