@@ -5,5 +5,4 @@ variable "region" {
 variable "bucket_prefix" {
   type    = string
   description = "Set bucket prefix without special characters"
-  default = "mybuckets3"
 }
