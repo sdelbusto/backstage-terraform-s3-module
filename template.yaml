@@ -90,3 +90,13 @@ spec:
       input:
         repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: '/catalog-info.yaml'
+
+    - id: convert-tfvars
+      name: Rename file to create tfvars file
+      action: fs:rename
+      input:
+        files:
+          - from: ./prod/terraform 
+            to: ./prod/terraform.tfvars
+          - from: ./test/terraform
+            to: ./test/terraform.tfvars
