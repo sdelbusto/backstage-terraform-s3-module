@@ -12,7 +12,7 @@ spec:
 
   # these are the steps which are rendered in the frontend with the form input
   parameters:
-    - title: Create a new Terraform Module
+    - title: Deploy new S3 using Terraform module
       required:
         - name
       properties:
@@ -40,7 +40,7 @@ spec:
             - aws
             - azure
 
-    - title: Choose a location
+    - title: Choose a repo location
       required:
         - repoUrl
       properties:
@@ -60,6 +60,8 @@ spec:
       action: fetch:template
       input:
         url: https://github.com/sdelbusto/backstage-terraform-s3-module/tree/main/templates/
+        copyWithoutRender:
+          - .github/workflows/*
         values:
           name: ${{ parameters.name }}
           type: ${{ parameters.type }}
