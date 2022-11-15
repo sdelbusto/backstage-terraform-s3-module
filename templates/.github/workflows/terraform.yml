@@ -1,18 +1,20 @@
 name: "Terraform"
-
 on:
+  # Manual trigger
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    paths:
+      - '*/**'
   pull_request:
+    branches: [ main ]
 
 defaults:
   run:
     shell: bash
 jobs:
   terraform:
-    name:   ${{matrix.runner}} - ${{ matrix.environment }}
-    runs-on: [ '${{ matrix.runner }}']
+    name: ${{matrix.runner}} - ${{ matrix.environment }}
+    runs-on: [ '${{ matrix.runner }}'] 
     strategy:
       max-parallel: 1
       matrix:
