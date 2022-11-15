@@ -7,10 +7,3 @@ variable "bucket_prefix" {
   description = "Set bucket prefix without special characters"
   default = "mybuckets3"
 }
-
-variable "environment" {
-  type = string
-}
-variable "project" {
-  type = string
-}
