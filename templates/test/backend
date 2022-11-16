@@ -1,0 +1,3 @@
+region = "${{values.region}}"
+bucket = "terraform-state-backstage-all"
+key    = "s3/test/${{values.bucket}}.tfstate"

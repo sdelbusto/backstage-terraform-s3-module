@@ -34,11 +34,11 @@ spec:
           ui:options:
             allowedKinds:
               - Group
-        provider:
-          title: The Terraform Provider to use
+        region:
+          title: Choose AWS region
           enum:
-            - aws
-            - azure
+            - eu-west-1
+            - us-east-1
         bucket:
           title: Set bucket name prefix
           type: string
@@ -70,9 +70,24 @@ spec:
           type: ${{ parameters.type }}
           owner: ${{ parameters.owner }}
           bucket: ${{ parameters.bucket }}
+          region: ${{ parameters.region }}
           description: ${{ parameters.description }}
           repo_name: ${{ (parameters.repoUrl | parseRepoUrl)["repo"] }}
           repo_owner: ${{ (parameters.repoUrl | parseRepoUrl)["owner"] }}
+  
+    - id: create-tfvars
+      name: Rename file to create tfvars file
+      action: fs:rename
+      input:
+        files:
+          - from: ./prod/vars 
+            to: ./prod/vars.tfvars
+          - from: ./test/vars
+            to: ./test/vars.tfvars
+          - from: ./prod/backend 
+            to: ./prod/backend.tfvars
+          - from: ./test/backend
+            to: ./test/backend.tfvars
 
     - id: publish
       name: Publish
@@ -90,13 +105,3 @@ spec:
       input:
         repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: '/catalog-info.yaml'
-
-    - id: convert-tfvars
-      name: Rename file to create tfvars file
-      action: fs:rename
-      input:
-        files:
-          - from: ./prod/terraform 
-            to: ./prod/terraform.tfvars
-          - from: ./test/terraform
-            to: ./test/terraform.tfvars
