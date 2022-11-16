@@ -50,7 +50,7 @@ spec:
         repoUrl:
           title: Repository Location
           type: string
-          value: terraform-${{ parameters.provider }}-${{ parameters.name }}
+          value: terraform-${{ parameters.name }}
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
