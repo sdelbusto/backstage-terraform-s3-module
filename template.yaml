@@ -4,7 +4,7 @@ kind: Template
 # some metadata about the template itself
 metadata:
   name: terraform
-  title: Terraform Module
+  title: Terraform S3 Module
   description: Create a new module for use with Terraform.io
 spec:
   owner: github.com/sdelbusto
