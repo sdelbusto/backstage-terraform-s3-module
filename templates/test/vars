@@ -1,0 +1,2 @@
+region        = "${{values.region}}"
+bucket_prefix = "${{values.bucket}}"

@@ -1,0 +1,107 @@
+
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+# some metadata about the template itself
+metadata:
+  name: terraform
+  title: Terraform S3 Module
+  description: Create a new module for use with Terraform.io
+spec:
+  owner: github.com/sdelbusto
+  type: service
+
+  # these are the steps which are rendered in the frontend with the form input
+  parameters:
+    - title: Deploy new S3 using Terraform module
+      required:
+        - name
+      properties:
+        name:
+          title: Component Name
+          type: string
+          description: Unique name of the terraform module
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        description:
+          title: A short description of the module - put full details in the README!
+          type: string
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        region:
+          title: Choose AWS region
+          enum:
+            - eu-west-1
+            - us-east-1
+        bucket:
+          title: Set bucket name prefix
+          type: string
+
+    - title: Choose a repo location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          value: terraform-${{ parameters.name }}
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  # here's the steps that are executed in series in the scaffolder backend
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: https://github.com/sdelbusto/backstage-terraform-s3-module/tree/main/templates/
+        copyWithoutTemplating:
+          - .github/workflows/*
+        values:
+          name: ${{ parameters.name }}
+          type: ${{ parameters.type }}
+          owner: ${{ parameters.owner }}
+          bucket: ${{ parameters.bucket }}
+          region: ${{ parameters.region }}
+          description: ${{ parameters.description }}
+          repo_name: ${{ (parameters.repoUrl | parseRepoUrl)["repo"] }}
+          repo_owner: ${{ (parameters.repoUrl | parseRepoUrl)["owner"] }}
+  
+    - id: create-tfvars
+      name: Rename file to create tfvars file
+      action: fs:rename
+      input:
+        files:
+          - from: ./prod/vars 
+            to: ./prod/vars.tfvars
+          - from: ./test/vars
+            to: ./test/vars.tfvars
+          - from: ./prod/backend 
+            to: ./prod/backend.tfvars
+          - from: ./test/backend
+            to: ./test/backend.tfvars
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: Terraform Module for ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        requireCodeOwnerReviews: true
+        defaultBranch: main
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
