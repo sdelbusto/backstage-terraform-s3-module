@@ -4,7 +4,7 @@ kind: Template
 # some metadata about the template itself
 metadata:
   name: terraform
-  title: Terraform S3 Module
+  title: Terraform Azure S3 Module
   description: Create a new module for use with Terraform.io
 spec:
   owner: github.com/sdelbusto
@@ -62,7 +62,7 @@ spec:
       name: Fetch Base
       action: fetch:template
       input:
-        url: https://github.com/sdelbusto/backstage-terraform-s3-module/tree/main/templates/
+        url: https://github.com/sdelbusto/backstage-terraform-s3-module-azure/tree/main/templates/
         copyWithoutTemplating:
           - .github/workflows/*
         values:
@@ -93,7 +93,7 @@ spec:
       name: Publish
       action: publish:github
       input:
-        allowedHosts: ['github.com']
+        allowedHosts: ['dev.azure.com']
         description: Terraform Module for ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         requireCodeOwnerReviews: true
